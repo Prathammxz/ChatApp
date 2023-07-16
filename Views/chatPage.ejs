@@ -6,6 +6,34 @@
     <title>chat app</title>
 </head>
 <body>
-    this is chat app
-</body>
+    <ul id="messages"></ul>
+  
+      <form class="input-container" id="form">
+        <input type="text" id="input" placeholder="Type message" />
+        <input type="submit" value="Send" />
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>     <!--Link for socket, just like we use for bootsrap etc  [same for all]-->
+    <script>
+      var socket = io();                                //initializing variable for io()
+      var form = document.getElementById('form');
+    var input = document.getElementById('input');
+    var messages = document.getElementById("messages")
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();                                    
+      if (input.value) {
+        socket.emit('chatMessage', input.value);                         //if data is there send message
+        input.value = '';
+      }
+    });
+    socket.on("getMessages",(data)=>{                                    //take the message sent and show it 
+      console.log(data)
+       var item = document.createElement('li');
+      item.textContent = data;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    })
+    
+    </script>
+  </body>
 </html>
